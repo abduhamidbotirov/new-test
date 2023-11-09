@@ -22,7 +22,7 @@ export const sequelize = new Sequelize({
     await sequelize.authenticate();
     // await sequelize.sync();
     for (let model in sequelize.models) {
-      await sequelize.models[model].sync({ alter: true })
+      await sequelize.models[model].sync({ force: true })
     }
     // await sequelize.sync({alter: true,});
     // await sequelize.sync({force: true,});

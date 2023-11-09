@@ -1,61 +1,47 @@
-// // user.model.ts
-import { DataTypes, Model } from 'sequelize';
+import { DataTypes, Model, Sequelize } from 'sequelize';
 import { sequelize } from '../../db/localSequelize.js';
+import { IUser } from './interface.js';
 
-
-export const User = sequelize.define('User', {
-    id: {
-        type: DataTypes.BIGINT,
-        primaryKey: true,
-        autoIncrement: true,
+// IUser interfaceni təyin edirik
+ const User = sequelize.define<Model<IUser>>(
+    'User',
+    {
+        id: {
+            type: DataTypes.BIGINT,
+            primaryKey: true,
+            autoIncrement: true,
+        },
+        username: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                isAlpha: true,
+                len: [3, 15],
+            },
+        },
+        email: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true,
+            validate: {
+                // isEmail: true,
+                isEmail: true,
+            },
+        },
+        password: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        role: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            values: ['super_admin', 'user', 'product_admin'],
+            defaultValue: 'user',
+        },
     },
-    username: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-    },
-    phone: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-    },
-});
+    {
+        modelName: 'User',
+    }
+);
 
-
-
-
-
-
-
-// class User extends Model {
-//     public id!: number;
-//     public username!: string;
-//     public email!: string;
-// }
-
-// User.init(
-//     {
-//         id: {
-//             type: DataTypes.INTEGER,
-//             autoIncrement: true,
-//             primaryKey: true,
-//         },
-//         username: DataTypes.STRING,
-//         email: {
-//             type: DataTypes.STRING,
-//             unique: true,
-//         },
-//     },
-//     {
-//         sequelize,
-//         modelName: 'Users',
-//     }
-// );
-
-// export { User };
-
-
+export default User

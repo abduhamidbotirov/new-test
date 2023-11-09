@@ -1,18 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
 import { JWT } from '../utils/jwt.js'; // Import your JWT library
 import UserModel from '../models/User/user.model.js';
-import mongoose from 'mongoose';
+import { IUser } from '../models/User/interface.js';
 declare global {
     namespace Express {
         interface Request {
             user: {
                 role: string;
-                id: mongoose.Types.ObjectId
+                id: any
             };
         }
     }
 }
-export default async function authMiddleware(req: Request, res: Response, next: NextFunction) {
+export async function authMiddleware(req: Request, res: Response, next: NextFunction) {
     let token: string | undefined = req.headers.token as string;
 
     if (!token) {
@@ -21,10 +21,10 @@ export default async function authMiddleware(req: Request, res: Response, next: 
         });
     }
     try {
-        const { id } = JWT.VERIFY(token) as { id: string }; // Assuming VERIFY returns an object with an 'id' property
-        const user = await UserModel.findById(id);
+        const { id } = JWT.VERIFY(token) as { id: string };
+        const user: IUser | null = await (UserModel.findByPk(id) as any);
         if (user) {
-            req.user = { ...req.user, role: user.role, id: user._id }; // Set the user's role in req.user
+            req.user = { ...req.user, role: user.role, id: user.id };
             next();
         } else {
             return res.status(401).json({

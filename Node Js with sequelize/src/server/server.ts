@@ -7,7 +7,6 @@ import "../models/associations/index.js"
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import path from "path";
-// import '../models/User/user.model.js'
 import indexRouter from "../models/index.routes.js";
 import errorMiddleware from "../middleware/errorHandler.js";
 import fileUpload from "express-fileupload";

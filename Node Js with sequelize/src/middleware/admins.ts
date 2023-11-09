@@ -9,6 +9,7 @@ const superAdminMiddleware = (req: Request, res: Response, next: NextFunction) =
         res.status(403).json({ message: "Access denied. Super admin access required." });
     }
 };
+
 // Middleware to check if the user is a product admin
 const productAdminMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const user = req.user; // Assuming you have a user object attached to the request
